@@ -1,4 +1,4 @@
-package com.petvital.petvital_backend.user.dto;
+package com.petvital.petvital_backend.feature.auth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

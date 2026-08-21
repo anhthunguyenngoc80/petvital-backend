@@ -1,7 +1,8 @@
-package com.petvital.petvital_backend.user;
+package com.petvital.petvital_backend.feature.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
     boolean existsByEmail(String email);
+    User findByEmail(String email);
  }
