@@ -72,6 +72,7 @@ public class AuthService {
         refreshTokenRepository.save(refreshTokenEntity);
 
         return new LoginResponseDto(
+                user.getUserId(),
                 accessToken,
                 refreshToken
         );

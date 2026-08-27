@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.petvital.petvital_backend.feature.auth.dto.LoginRequest;
+import com.petvital.petvital_backend.feature.auth.dto.LoginResponseDto;
 import com.petvital.petvital_backend.feature.auth.dto.RegisterRequest;
 
 import jakarta.validation.Valid;
@@ -29,9 +30,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
-        authService.login(request);
-        return ResponseEntity.ok(Map.of("message", "Login successfully"));
+    public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequest request) {
+        LoginResponseDto response = authService.login(request);
+        return ResponseEntity.ok(response);
     }
     
 }
