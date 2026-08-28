@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PetRepository extends JpaRepository<Pet, Integer> {
 
-    List<Pet> findAllByOwner_UserId(Integer ownerId);
+    List<Pet> findAllByOwnerId(Integer ownerId);
 }

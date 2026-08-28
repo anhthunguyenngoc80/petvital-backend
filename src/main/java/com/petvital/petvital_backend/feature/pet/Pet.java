@@ -2,16 +2,11 @@ package com.petvital.petvital_backend.feature.pet;
 
 import java.time.LocalDate;
 
-import com.petvital.petvital_backend.feature.user.User;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -23,9 +18,8 @@ public class Pet {
     @Column(name = "pet_id")
     private Integer petId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User owner;
+    @Column(name = "user_id", nullable = false)
+    private Integer ownerId;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -49,12 +43,12 @@ public class Pet {
         return petId;
     }
 
-    public User getOwner() {
-        return owner;
+    public Integer getOwnerId() {
+        return ownerId;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
+    public void setOwnerId(Integer ownerId) {
+        this.ownerId = ownerId;
     }
 
     public String getName() {
