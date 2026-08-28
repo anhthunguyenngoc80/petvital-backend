@@ -33,8 +33,20 @@ public class RefreshToken {
         this.token = token;
     }
 
+    public String getToken() {
+        return token;
+    }
+
     public void setExpiresAt(Instant expiresAt) {
         this.expiresAt = expiresAt;
+    }
+
+    public Instant getExpiresAt() {
+        return expiresAt;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     @Column(nullable = false, unique = true)

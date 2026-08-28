@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.petvital.petvital_backend.feature.auth.dto.LoginRequest;
 import com.petvital.petvital_backend.feature.auth.dto.LoginResponseDto;
 import com.petvital.petvital_backend.feature.auth.dto.RegisterRequest;
+import com.petvital.petvital_backend.feature.auth.dto.RefreshTokenRequest;
 
 import jakarta.validation.Valid;
 
@@ -34,5 +35,11 @@ public class AuthController {
         LoginResponseDto response = authService.login(request);
         return ResponseEntity.ok(response);
     }
-    
+
+    @PostMapping("/refresh")
+    public ResponseEntity<LoginResponseDto> refreshToken(@Valid @RequestBody RefreshTokenRequest request) {
+        String refreshToken = request.refreshToken();
+        LoginResponseDto response = authService.refreshToken(refreshToken);
+        return ResponseEntity.ok(response);
+    }
 }
