@@ -2,8 +2,10 @@ package com.petvital.petvital_backend.feature.pet;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.petvital.petvital_backend.feature.pet.dto.PetRequestDto;
 import com.petvital.petvital_backend.feature.pet.dto.PetResponseDto;
@@ -46,6 +48,16 @@ public class PetService {
         return petRepository.findAllByOwnerId(ownerId).stream()
                 .map(this::toResponseDto)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public PetResponseDto getPetById(Integer petId) {
+        Pet pet = petRepository.findById(petId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Pet not found with id: " + petId));
+
+        return toResponseDto(pet);
     }
 
     private PetResponseDto toResponseDto(Pet pet) {

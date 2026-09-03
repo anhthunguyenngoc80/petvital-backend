@@ -64,4 +64,16 @@ public class PetController {
 
         return ResponseEntity.ok(pets);
     }
+
+    /**
+     * Returns the basic information of a single pet identified by its id.
+     */
+    @GetMapping("/pets/{petId}")
+    public ResponseEntity<PetResponseDto> getPetById(
+            @PathVariable Integer petId) {
+
+        PetResponseDto pet = petService.getPetById(petId);
+
+        return ResponseEntity.ok(pet);
+    }
 }
