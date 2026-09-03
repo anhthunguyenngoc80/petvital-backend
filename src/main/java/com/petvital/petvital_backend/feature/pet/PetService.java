@@ -8,24 +8,18 @@ import org.springframework.transaction.annotation.Transactional;
 import com.petvital.petvital_backend.feature.pet.dto.PetRequestDto;
 import com.petvital.petvital_backend.feature.pet.dto.PetResponseDto;
 import com.petvital.petvital_backend.feature.user.User;
-import com.petvital.petvital_backend.feature.user.UserRepository;
 
 @Service
 public class PetService {
 
     private final PetRepository petRepository;
-    private final UserRepository userRepository;
 
-    public PetService(PetRepository petRepository, UserRepository userRepository) {
+    public PetService(PetRepository petRepository) {
         this.petRepository = petRepository;
-        this.userRepository = userRepository;
     }
 
     @Transactional
-    public PetResponseDto addPet(PetRequestDto request) {
-        User owner = userRepository.findById(request.ownerId())
-                .orElseThrow(() -> new IllegalArgumentException("Owner not found"));
-
+    public PetResponseDto addPet(PetRequestDto request, User owner) {
         Pet pet = new Pet();
         pet.setOwnerId(owner.getUserId());
         pet.setName(request.name());

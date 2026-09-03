@@ -29,9 +29,12 @@ public class PetController {
 
     @PostMapping("/pets")
     public ResponseEntity<PetResponseDto> registerPet(
-            @Valid @RequestBody PetRequestDto request) {
+            @Valid @RequestBody PetRequestDto request,
+            Authentication authentication) {
 
-        PetResponseDto response = petService.addPet(request);
+        User currentUser = (User) authentication.getPrincipal();
+
+        PetResponseDto response = petService.addPet(request, currentUser);
 
         return ResponseEntity.ok(response);
     }
