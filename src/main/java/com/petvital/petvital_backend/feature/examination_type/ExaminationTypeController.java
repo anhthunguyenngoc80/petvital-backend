@@ -2,7 +2,12 @@ package com.petvital.petvital_backend.feature.examination_type;
 
 import jakarta.validation.Valid;
 
+import com.petvital.petvital_backend.feature.examination_type.dto.ExaminationTypeSummaryDto;
+
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +25,18 @@ public class ExaminationTypeController {
     public ExaminationTypeController(
             ExaminationTypeService examinationTypeService) {
         this.examinationTypeService = examinationTypeService;
+    }
+
+    /**
+     * Returns the list of all examination types.
+     *
+     * Example: GET /api/examination-types
+     */
+    @GetMapping
+    public ResponseEntity<List<ExaminationTypeSummaryDto>> getAllExaminationTypes() {
+        List<ExaminationTypeSummaryDto> response =
+                examinationTypeService.getAllExaminationTypes();
+        return ResponseEntity.ok(response);
     }
 
     /**

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.petvital.petvital_backend.feature.examination_type.dto.CreateExaminationTypeRequestDto;
 import com.petvital.petvital_backend.feature.examination_type.dto.ExaminationTypeResponseDto;
+import com.petvital.petvital_backend.feature.examination_type.dto.ExaminationTypeSummaryDto;
 import com.petvital.petvital_backend.feature.examination_type.entity.ExaminationType;
 import com.petvital.petvital_backend.feature.examination_type.entity.ExaminationTypeParameter;
 import com.petvital.petvital_backend.feature.examination_type.repository.ExaminationTypeParameterRepository;
@@ -105,6 +106,19 @@ public class ExaminationTypeService {
                 savedType.getName(),
                 savedType.getDescription(),
                 parameterResponses);
+    }
+
+    /**
+     * Returns the list of all examination types.
+     */
+    @Transactional(readOnly = true)
+    public List<ExaminationTypeSummaryDto> getAllExaminationTypes() {
+        return examinationTypeRepository.findAll().stream()
+                .map(type -> new ExaminationTypeSummaryDto(
+                        type.getExaminationTypeId(),
+                        type.getName(),
+                        type.getDescription()))
+                .toList();
     }
 
     private ReferenceRangeResponseDto toRangeResponse(ReferenceRange range) {
