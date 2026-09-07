@@ -1,4 +1,4 @@
-package com.petvital.petvital_backend.feature.examination.entity;
+package com.petvital.petvital_backend.feature.test_parameter;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +14,7 @@ public class TestParameter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "parameter_id")
-    private Integer parameterId;
+    private Integer id;
 
     @Column(name = "code", nullable = false, unique = true, length = 50)
     private String code;
@@ -31,8 +31,8 @@ public class TestParameter {
     @Column(name = "default_unit")
     private String defaultUnit;
 
-    public Integer getParameterId() {
-        return parameterId;
+    public Integer getId() {
+        return id;
     }
 
     public String getCode() {

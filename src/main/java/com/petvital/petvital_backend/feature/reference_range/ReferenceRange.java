@@ -1,4 +1,4 @@
-package com.petvital.petvital_backend.feature.examination.entity;
+package com.petvital.petvital_backend.feature.reference_range;
 
 import java.math.BigDecimal;
 
@@ -17,9 +17,6 @@ public class ReferenceRange {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reference_range_id")
     private Integer referenceRangeId;
-
-    @Column(name = "parameter_id", nullable = false)
-    private Integer parameterId;
 
     @Column(name = "species", nullable = false)
     private String species;
@@ -51,14 +48,6 @@ public class ReferenceRange {
 
     public void setReferenceRangeId(Integer referenceRangeId) {
         this.referenceRangeId = referenceRangeId;
-    }
-
-    public Integer getParameterId() {
-        return parameterId;
-    }
-
-    public void setParameterId(Integer parameterId) {
-        this.parameterId = parameterId;
     }
 
     public String getSpecies() {
