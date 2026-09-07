@@ -1,4 +1,4 @@
-package com.petvital.petvital_backend.feature.examination;
+package com.petvital.petvital_backend.feature.examination.entity;
 
 import java.time.LocalDateTime;
 

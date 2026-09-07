@@ -1,4 +1,4 @@
-package com.petvital.petvital_backend.feature.examination;
+package com.petvital.petvital_backend.feature.examination.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

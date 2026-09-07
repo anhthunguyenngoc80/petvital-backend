@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.petvital.petvital_backend.feature.examination.dto.ExaminationResponseDto;
+import com.petvital.petvital_backend.feature.examination.entity.Examination;
 
 @Service
 public class ExaminationService {
