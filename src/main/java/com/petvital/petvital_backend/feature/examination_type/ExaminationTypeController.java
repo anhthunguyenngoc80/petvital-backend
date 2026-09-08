@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,18 +41,33 @@ public class ExaminationTypeController {
     }
 
     /**
+     * Returns one examination type together with all its test parameters
+     * (indicators) and each parameter's reference values.
+     *
+     * Example: GET /api/examination-types/1
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<ExaminationTypeResponseDto> getExaminationTypeById(
+            @PathVariable("id") Integer id) {
+
+        ExaminationTypeResponseDto response =
+                examinationTypeService.getExaminationTypeById(id);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
      * Creates a new examination type together with its test parameters
      * (indicators) and their reference ranges.
      *
      * Example: POST /api/examination-types
      */
     @PostMapping
-    public ResponseEntity<ExaminationTypeResponseDto> createExaminationType(
+        public ResponseEntity<ExaminationTypeResponseDto> createExaminationType(
             @Valid @RequestBody CreateExaminationTypeRequestDto request) {
 
         ExaminationTypeResponseDto response =
-                examinationTypeService.createExaminationType(request);
+            examinationTypeService.createExaminationType(request);
 
         return ResponseEntity.ok(response);
-    }
+        }
 }

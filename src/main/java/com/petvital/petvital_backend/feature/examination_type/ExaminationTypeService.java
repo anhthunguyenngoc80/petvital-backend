@@ -1,7 +1,10 @@
 package com.petvital.petvital_backend.feature.examination_type;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -119,6 +122,84 @@ public class ExaminationTypeService {
                         type.getName(),
                         type.getDescription()))
                 .toList();
+    }
+
+    /**
+     * Returns one examination type together with all its test parameters
+     * (indicators) and each parameter's reference ranges.
+     */
+    @Transactional(readOnly = true)
+    public ExaminationTypeResponseDto getExaminationTypeById(
+            Integer examinationTypeId) {
+
+        ExaminationType type = examinationTypeRepository
+                .findById(examinationTypeId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Examination type not found: " + examinationTypeId));
+
+        List<ExaminationTypeParameter> links =
+                examinationTypeParameterRepository
+                        .findAllByExaminationTypeId(examinationTypeId);
+
+        List<TestParameterResponseDto> parameterResponses = new ArrayList<>();
+
+        if (!links.isEmpty()) {
+            List<Integer> parameterIds = links.stream()
+                    .map(ExaminationTypeParameter::getParameterId)
+                    .distinct()
+                    .toList();
+
+            List<Integer> rangeIds = links.stream()
+                    .map(ExaminationTypeParameter::getReferenceRangeId)
+                    .toList();
+
+            Map<Integer, TestParameter> parametersById =
+                    testParameterRepository.findAllByIdIn(parameterIds)
+                            .stream()
+                            .collect(Collectors.toMap(
+                                    TestParameter::getId, p -> p));
+
+            Map<Integer, List<ReferenceRange>> rangesByRangeId =
+                    new HashMap<>();
+            for (ReferenceRange range : referenceRangeRepository
+                    .findAllByReferenceRangeIdIn(rangeIds)) {
+                rangesByRangeId
+                        .computeIfAbsent(range.getReferenceRangeId(),
+                                k -> new ArrayList<>())
+                        .add(range);
+            }
+
+            for (ExaminationTypeParameter link : links) {
+                TestParameter parameter =
+                        parametersById.get(link.getParameterId());
+                if (parameter == null) {
+                    continue;
+                }
+
+                List<ReferenceRangeResponseDto> rangeResponses =
+                        rangesByRangeId
+                                .getOrDefault(link.getReferenceRangeId(),
+                                        List.of())
+                                .stream()
+                                .map(this::toRangeResponse)
+                                .toList();
+
+                parameterResponses.add(new TestParameterResponseDto(
+                        parameter.getId(),
+                        parameter.getCode(),
+                        parameter.getName(),
+                        parameter.getCategory(),
+                        parameter.getDescription(),
+                        parameter.getDefaultUnit(),
+                        rangeResponses));
+            }
+        }
+
+        return new ExaminationTypeResponseDto(
+                type.getExaminationTypeId(),
+                type.getName(),
+                type.getDescription(),
+                parameterResponses);
     }
 
     private ReferenceRangeResponseDto toRangeResponse(ReferenceRange range) {
