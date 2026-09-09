@@ -9,6 +9,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.petvital.petvital_backend.feature.examination_parameter.ExaminationParameter;
+import com.petvital.petvital_backend.feature.examination_parameter.ExaminationParameterRepository;
+import com.petvital.petvital_backend.feature.examination_parameter.dto.ExaminationParameterRequestDto;
+import com.petvital.petvital_backend.feature.examination_parameter.dto.ExaminationParameterResponseDto;
 import com.petvital.petvital_backend.feature.examination_type.dto.CreateExaminationTypeRequestDto;
 import com.petvital.petvital_backend.feature.examination_type.dto.ExaminationTypeResponseDto;
 import com.petvital.petvital_backend.feature.examination_type.dto.ExaminationTypeSummaryDto;
@@ -20,27 +24,23 @@ import com.petvital.petvital_backend.feature.reference_range.ReferenceRange;
 import com.petvital.petvital_backend.feature.reference_range.ReferenceRangeRepository;
 import com.petvital.petvital_backend.feature.reference_range.dto.ReferenceRangeRequestDto;
 import com.petvital.petvital_backend.feature.reference_range.dto.ReferenceRangeResponseDto;
-import com.petvital.petvital_backend.feature.test_parameter.TestParameter;
-import com.petvital.petvital_backend.feature.test_parameter.TestParameterRepository;
-import com.petvital.petvital_backend.feature.test_parameter.dto.TestParameterRequestDto;
-import com.petvital.petvital_backend.feature.test_parameter.dto.TestParameterResponseDto;
 
 @Service
 public class ExaminationTypeService {
 
     private final ExaminationTypeRepository examinationTypeRepository;
-    private final TestParameterRepository testParameterRepository;
+    private final ExaminationParameterRepository ExaminationParameterRepository;
     private final ReferenceRangeRepository referenceRangeRepository;
     private final ExaminationTypeParameterRepository
             examinationTypeParameterRepository;
 
     public ExaminationTypeService(
             ExaminationTypeRepository examinationTypeRepository,
-            TestParameterRepository testParameterRepository,
+            ExaminationParameterRepository ExaminationParameterRepository,
             ReferenceRangeRepository referenceRangeRepository,
             ExaminationTypeParameterRepository examinationTypeParameterRepository) {
         this.examinationTypeRepository = examinationTypeRepository;
-        this.testParameterRepository = testParameterRepository;
+        this.ExaminationParameterRepository = ExaminationParameterRepository;
         this.referenceRangeRepository = referenceRangeRepository;
         this.examinationTypeParameterRepository =
                 examinationTypeParameterRepository;
@@ -55,17 +55,17 @@ public class ExaminationTypeService {
         type.setDescription(request.description());
         ExaminationType savedType = examinationTypeRepository.save(type);
 
-        List<TestParameterResponseDto> parameterResponses = new ArrayList<>();
+        List<ExaminationParameterResponseDto> parameterResponses = new ArrayList<>();
 
-        for (TestParameterRequestDto parameterRequest : request.parameters()) {
+        for (ExaminationParameterRequestDto parameterRequest : request.parameters()) {
 
-            TestParameter parameter = new TestParameter();
+            ExaminationParameter parameter = new ExaminationParameter();
             parameter.setCode(parameterRequest.code());
             parameter.setName(parameterRequest.name());
             parameter.setCategory(parameterRequest.category());
             parameter.setDescription(parameterRequest.description());
             parameter.setDefaultUnit(parameterRequest.defaultUnit());
-            TestParameter savedParameter = testParameterRepository.save(parameter);
+            ExaminationParameter savedParameter = ExaminationParameterRepository.save(parameter);
 
             List<ReferenceRangeResponseDto> rangeResponses = new ArrayList<>();
 
@@ -94,7 +94,7 @@ public class ExaminationTypeService {
                 }
             }
 
-            parameterResponses.add(new TestParameterResponseDto(
+            parameterResponses.add(new ExaminationParameterResponseDto(
                     savedParameter.getId(),
                     savedParameter.getCode(),
                     savedParameter.getName(),
@@ -141,7 +141,7 @@ public class ExaminationTypeService {
                 examinationTypeParameterRepository
                         .findAllByExaminationTypeId(examinationTypeId);
 
-        List<TestParameterResponseDto> parameterResponses = new ArrayList<>();
+        List<ExaminationParameterResponseDto> parameterResponses = new ArrayList<>();
 
         if (!links.isEmpty()) {
             List<Integer> parameterIds = links.stream()
@@ -153,11 +153,11 @@ public class ExaminationTypeService {
                     .map(ExaminationTypeParameter::getReferenceRangeId)
                     .toList();
 
-            Map<Integer, TestParameter> parametersById =
-                    testParameterRepository.findAllByIdIn(parameterIds)
+            Map<Integer, ExaminationParameter> parametersById =
+                    ExaminationParameterRepository.findAllByIdIn(parameterIds)
                             .stream()
                             .collect(Collectors.toMap(
-                                    TestParameter::getId, p -> p));
+                                    ExaminationParameter::getId, p -> p));
 
             Map<Integer, List<ReferenceRange>> rangesByRangeId =
                     new HashMap<>();
@@ -170,7 +170,7 @@ public class ExaminationTypeService {
             }
 
             for (ExaminationTypeParameter link : links) {
-                TestParameter parameter =
+                ExaminationParameter parameter =
                         parametersById.get(link.getParameterId());
                 if (parameter == null) {
                     continue;
@@ -184,7 +184,7 @@ public class ExaminationTypeService {
                                 .map(this::toRangeResponse)
                                 .toList();
 
-                parameterResponses.add(new TestParameterResponseDto(
+                parameterResponses.add(new ExaminationParameterResponseDto(
                         parameter.getId(),
                         parameter.getCode(),
                         parameter.getName(),

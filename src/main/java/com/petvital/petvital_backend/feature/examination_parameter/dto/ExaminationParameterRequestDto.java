@@ -1,4 +1,4 @@
-package com.petvital.petvital_backend.feature.test_parameter.dto;
+package com.petvital.petvital_backend.feature.examination_parameter.dto;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import jakarta.validation.constraints.NotBlank;
  * Payload for a single test parameter (indicator) attached to an examination
  * type, together with its reference ranges.
  */
-public record TestParameterRequestDto(
+public record ExaminationParameterRequestDto(
         @NotBlank
         String code,
         @NotBlank

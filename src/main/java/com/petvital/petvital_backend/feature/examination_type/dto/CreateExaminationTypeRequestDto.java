@@ -2,7 +2,7 @@ package com.petvital.petvital_backend.feature.examination_type.dto;
 
 import java.util.List;
 
-import com.petvital.petvital_backend.feature.test_parameter.dto.TestParameterRequestDto;
+import com.petvital.petvital_backend.feature.examination_parameter.dto.ExaminationParameterRequestDto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -37,6 +37,6 @@ public record CreateExaminationTypeRequestDto(
         String description,
         @NotNull
         @Valid
-        List<TestParameterRequestDto> parameters
+        List<ExaminationParameterRequestDto> parameters
 ) {
 }
