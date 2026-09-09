@@ -21,8 +21,15 @@ public class Document {
     @Column(name = "examination_id", nullable = false)
     private Integer examinationId;
 
-    @Column(name = "file_url", nullable = false, columnDefinition = "text")
+    @Column(name = "file_url", columnDefinition = "text")
     private String fileUrl;
+
+    /** Raw file content stored directly in the database (PostgreSQL bytea). */
+    @Column(name = "file_data", columnDefinition = "bytea")
+    private byte[] fileData;
+
+    @Column(name = "content_type")
+    private String contentType;
 
     @Column(name = "original_filename")
     private String originalFilename;
@@ -48,6 +55,22 @@ public class Document {
 
     public void setFileUrl(String fileUrl) {
         this.fileUrl = fileUrl;
+    }
+
+    public byte[] getFileData() {
+        return fileData;
+    }
+
+    public void setFileData(byte[] fileData) {
+        this.fileData = fileData;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 
     public String getOriginalFilename() {
